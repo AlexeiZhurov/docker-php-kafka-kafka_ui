@@ -22,9 +22,9 @@ if (!$producer->getMetadata(false, $topic, 2000)) {
 $i = 0;
 
 while ($i < 100) {
-    $data = json_decode(file_get_contents("https://type.fit/api/quotes"))[$i]->text;//Получеие случайны сообщений для разнообразия
+    // $data = json_decode(file_get_contents("https://type.fit/api/quotes"))[$i]->text;//Получеие случайны сообщений для разнообразия
     $i++;
-    $topic->produce(RD_KAFKA_PARTITION_UA, 0, "Сообщние:".$data);
+    $topic->produce(RD_KAFKA_PARTITION_UA, 0, "Сообщние:".$i);
 }
 
 $producer->flush(200);

@@ -1,12 +1,4 @@
-FROM php:8.0-apache
-WORKDIR /var/www/html
-COPY ./ /var/www/html
-# ENV CONTEXT_DOCUMENT_ROOT /var/www/html/public
-
-# RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-# RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-EXPOSE 80
+FROM php:8.0-fpm
 
 RUN apt-get update --fix-missing \
     && apt-get install -y curl wget zip unzip git \

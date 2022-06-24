@@ -1,12 +1,20 @@
 version: '3'
 
 services:
+
     php:
       build: ./docker/php/
-      ports:
-        - 80:80
       volumes:
-          - ./:/var/www/
+          - ./:/usr/share/nginx/www
+      working_dir: /usr/share/nginx/www
+    nginx:
+      build: ./docker/nginx
+      links:
+          - php
+      volumes_from:
+          - php
+      ports:
+          - 80:80
     db:
       image: postgres
       restart: always
@@ -29,20 +37,20 @@ services:
     kafka:
       image: wurstmeister/kafka
       ports:
-      - 9092:9092
+          - 9092:9092
       environment:
         KAFKA_ADVERTISED_HOST_NAME: kafka
         KAFKA_CREATE_TOPICS: "test:1:1"
         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
+          - /var/run/docker.sock:/var/run/docker.sock
       depends_on:
-        - zookeeper
+          - zookeeper
     kafka-ui:
       image: provectuslabs/kafka-ui
       container_name: kafka-ui
       ports:
-        - "3333:8080"
+          - "3333:8080"
       restart: always
       environment:
         - KAFKA_CLUSTERS_0_NAME=local
